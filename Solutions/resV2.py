@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-#Purchase object
+
+
 class Ordine:
 
 	def __init__(self,purchase_list):
@@ -29,16 +30,10 @@ class Ship:
 
 
 
-
-
-
-
-
-
 def maximizeProfit(number_of_ship,number_of_purchase,initial_budget,orders):
 
 	#ordering based on the maximum time
-	orders = sorted(orders, key=lambda x: (x.tempo_massimo, x.tempo_massimo - x.tempo)) #purchases.sort(key=lambda x: x.tempo_massimo,x.tempo)
+	orders = sorted(orders, key=lambda x: (x.tempo_massimo, x.tempo_massimo - x.tempo))
 
 	ships = [Ship(i) for i in range(0,number_of_ship) ]
 
@@ -58,12 +53,6 @@ def maximizeProfit(number_of_ship,number_of_purchase,initial_budget,orders):
 			initial_budget -= ( min_ship.time_enlapsed - order.tempo_massimo)
 
 		print(initial_budget)
-
-
-
-
-
-
 
 
 
