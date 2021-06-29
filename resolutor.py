@@ -1,7 +1,9 @@
 #!/usr/bin/python3
+from operator import attrgetter
+
+
 
 #Purchase object
-
 class Ordine:
 
 	def __init__(self,purchase_list):
@@ -11,6 +13,8 @@ class Ordine:
 		self.tempo_massimo = purchase_list[3]
 		self.ricavo = purchase_list[4]
 
+	def __str__(self):
+		return ""+ str(self.id) + " " + str(self.costo) + " " + str(self.tempo) + " " + str(self.tempo_massimo) + " " + str(self.ricavo) 
 
 
 class Ship:
@@ -25,15 +29,26 @@ class Ship:
 
 
 
-
-def find_lower_ship(ships):
+def findMinShip(ships):
 	min_ship = ships[0]
 
 	for ship in ships:
-		if ship.time_enlapsed < min_ship.time_enlapsed:
+		if ship.time_enlapsed <= min_ship.time_enlapsed:
 			min_ship = ship
-
+		'''elif len(ship.list_of_order) <= len(min_ship.list_of_order):
+			min_ship = ship'''
 	return min_ship
+
+
+
+def saveAllToFile(purchases):
+	out_file = open("sortedInput.txt",'w')
+
+	for purchase in purchases:
+		out_file.write(str(purchase)+ "\n")
+		#out_file.write("T.Max: " + str(purchase.tempo_massimo)+ "  T:" + str(purchase.tempo)+ "\n")
+
+
 
 
 
@@ -63,24 +78,29 @@ if __name__ == "__main__":
 
 
 	#ordering based on the maximum time
-	purchases.sort(key=lambda x: x.tempo_massimo)
+	purchases = sorted(purchases, key=lambda x: (x.tempo_massimo, x.tempo_massimo - x.tempo,x.costo,x.ricavo)) #purchases.sort(key=lambda x: x.tempo_massimo,x.tempo)
+
+
+	saveAllToFile(purchases)
+
 
 	ships = [Ship(i) for i in range(0,number_of_ship) ]
 
 
 	out_file = open("out.txt","w")
 	for order in purchases:
-		min_ship = find_lower_ship(ships)
+		min_ship = findMinShip(ships)#min(ships,key=(attrgetter('time_enlapsed')))
 
 		out_file.write("" + str(min_ship.id) + " " + str(order.id) + "\n")
 
+		start_time = min_ship.time_enlapsed
 		min_ship.add_order(order)
 
 		initial_budget += order.ricavo
 		initial_budget -= order.costo
 
-		if order.tempo_massimo > min_ship.time_enlapsed:
-			initial_budget -= ( min_ship.time_enlapsed - order.tempo_massimo)		
+		if min_ship.time_enlapsed > order.tempo_massimo:
+			initial_budget -= ( min_ship.time_enlapsed - order.tempo_massimo)
 
 		print(initial_budget)
 
