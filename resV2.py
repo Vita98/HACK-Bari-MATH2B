@@ -26,63 +26,24 @@ class Ship:
 
 
 
-def findMinShip(ships):
-	min_ship = ships[0]
-
-	for ship in ships:
-		if ship.time_enlapsed <= min_ship.time_enlapsed:
-			min_ship = ship
-	return min_ship
 
 
 
-def saveAllToFile(purchases):
-	out_file = open("sortedInput.txt",'w')
-
-	for purchase in purchases:
-		out_file.write(str(purchase)+ "\n")
-		#out_file.write("T.Max: " + str(purchase.tempo_massimo)+ "  T:" + str(purchase.tempo)+ "\n")
 
 
 
-if __name__ == "__main__":
-	file = open("input","r")
-
-	first_line = list(map(int,file.readline().rstrip().lstrip().split(" ")))
-
-	number_of_ship = first_line[0]
-	number_of_purchase = first_line[1]
-	initial_budget = first_line[2]
-
-	purchases = []
-
-	i = 0
-	#read all the purchase
-	while i < number_of_purchase:
-		actual_purchase_line = file.readline()
-		
-		purchase = list(map(int,actual_purchase_line.rstrip().lstrip().split(" ")))
-		
-		ordine = Ordine(purchase)
-		purchases.append(ordine)
-
-		i += 1
 
 
-	
+
+def maximizeProfit(number_of_ship,number_of_purchase,initial_budget,orders):
+
 	#ordering based on the maximum time
-	purchases = sorted(purchases, key=lambda x: (x.tempo_massimo, x.tempo_massimo - x.tempo)) #purchases.sort(key=lambda x: x.tempo_massimo,x.tempo)
-
-
-	saveAllToFile(purchases)
-
+	orders = sorted(orders, key=lambda x: (x.tempo_massimo, x.tempo_massimo - x.tempo)) #purchases.sort(key=lambda x: x.tempo_massimo,x.tempo)
 
 	ships = [Ship(i) for i in range(0,number_of_ship) ]
 
-
-	
 	out_file = open("out.txt","w")
-	for order in purchases:
+	for order in orders:
 		min_ship = min(ships,key=lambda x: x.time_enlapsed)
 
 		out_file.write("" + str(min_ship.id) + " " + str(order.id) + "\n")
@@ -97,6 +58,42 @@ if __name__ == "__main__":
 			initial_budget -= ( min_ship.time_enlapsed - order.tempo_massimo)
 
 		print(initial_budget)
+
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+	file = open("input","r")
+
+	first_line = list(map(int,file.readline().rstrip().lstrip().split(" ")))
+
+	number_of_ship = first_line[0]
+	number_of_purchase = first_line[1]
+	initial_budget = first_line[2]
+
+	orders = []
+
+	i = 0
+	#read all the orders
+	while i < number_of_purchase:
+		actual_order_line = file.readline()
+		
+		order_line = list(map(int,actual_order_line.rstrip().lstrip().split(" ")))
+		
+		order = Ordine(order_line)
+		orders.append(order)
+		i += 1
+
+	maximizeProfit(number_of_ship,number_of_purchase,initial_budget,orders)
 
 
 
