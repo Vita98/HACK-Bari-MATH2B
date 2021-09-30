@@ -8,4 +8,4 @@
 The repository is thus formed:
 
 - A "Problem" directory with all the file explaning the problem
-- A "Solution" directory with a solution written in python for the problem
+- A "Solution" directory with a solution for the problem written in Python.
